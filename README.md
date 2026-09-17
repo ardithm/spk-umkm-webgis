@@ -1,39 +1,21 @@
-# SPK UMKM WebGIS
+# spk-umkm-webgis
 
-Sistem pendukung keputusan (SPK) untuk UMKM berbasis WebGIS.
+Sistem pendukung keputusan untuk menilai dan memeringkat UMKM secara objektif dengan pendekatan berbasis web dan visualisasi lokasi. Aplikasi ini membantu evaluasi UMKM berdasarkan kriteria tertentu serta menampilkan hasilnya dalam bentuk ranking dan dashboard yang mudah dipahami.
 
-## Fitur utama
-- Pendaftaran dan pengelolaan UMKM
-- Penilaian berbasis kriteria dan profil matching
-- Dashboard hasil perhitungan
-- Integrasi peta dan visualisasi data lokasi
+## Deskripsi Proyek
+Proyek ini dirancang untuk mendukung pengambilan keputusan dalam menilai kelayakan dan prioritas UMKM. Dengan pendekatan digital, proses evaluasi menjadi lebih terstruktur, transparan, dan mudah dipantau.
 
-## Teknologi
-- Laravel 13
-- PHP 8.3+
-- Vite + Tailwind CSS
-- SQLite / database Laravel default
+## Metode
+Aplikasi ini menggunakan metode Profile Matching, yaitu membandingkan data UMKM dengan profil ideal yang diinginkan. Hasil perbandingan digunakan untuk menghasilkan ranking atau prioritas UMKM.
 
-## Persiapan lokal
-1. Salin file `.env.example` menjadi `.env`
-2. Jalankan:
-   ```bash
-   composer install
-   npm install
-   php artisan key:generate
-   php artisan migrate
-   npm run build
-   ```
-3. Jalankan aplikasi:
-   ```bash
-   php artisan serve
-   ```
+## Fitur Utama
+- Pengelolaan data UMKM
+- Penilaian berbasis kriteria
+- Proses perhitungan dan ranking
+- Dashboard hasil evaluasi
+- Visualisasi lokasi UMKM berbasis WebGIS
+- Pendaftaran dan pengelolaan pengajuan UMKM
 
-## Standar siap push ke GitHub
-- `.gitignore` sudah dibuat agar file sensitif dan artefak build tidak ikut dalam commit
-- `.env` tidak disimpan ke repository
-- `composer.lock` dan `package-lock.json` disarankan tetap dilacak untuk reproduksi build
-- Gunakan branch yang jelas seperti `main`, `develop`, atau fitur tertentu sebelum push
+## Tujuan
+Membantu pemangku kepentingan dalam membuat keputusan yang lebih objektif, cepat, dan berbasis data untuk mendukung pengembangan UMKM.
 
-## Catatan
-Sesuaikan konfigurasi database dan variabel lingkungan pada file `.env` sebelum menjalankan aplikasi di lingkungan masing-masing.
