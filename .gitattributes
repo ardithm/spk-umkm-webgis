@@ -1,0 +1,5 @@
+* text=auto
+*.php diff=php
+*.blade.php diff=html
+*.css linguist-vendored
+tests/** export-ignore

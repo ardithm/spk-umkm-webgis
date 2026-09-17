@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistem Pendukung Keputusan Seleksi UMKM Penerima Bantuan Modal Usaha Berbasis WebGIS - Dinas Koperasi, Usaha Mikro dan Tenaga Kerja Kota Banjarmasin">
+  <title>SiBantuan UMKM WebGIS — Dinas Koperasi & UMKM Kota Banjarmasin</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Leaflet.js CSS for WebGIS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- Custom Design System Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       Header & Navigation Bar (design.md 4.1)
+       ======================================================================== -->
+  <header class="header-wrapper">
+    <nav class="navbar" aria-label="Navigasi Utama">
+      <!-- Nav Left -->
+      <div class="nav-left">
+        <a href="#beranda" class="nav-link active">Beranda</a>
+        <a href="#alur-seleksi" class="nav-link">Alur & Kriteria</a>
+        <a href="#peta-webgis" class="nav-link">Peta WebGIS</a>
+        <a href="#simulasi-spk" class="nav-link">Simulasi SPK</a>
+        <a href="#jadwal-gelombang" class="nav-link">Jadwal</a>
+      </div>
+
+      <!-- Center Brand Logo -->
+      <a href="#beranda" class="brand-center">
+        <div class="brand-logo-badge">
+          <!-- Geometric Golden/Purple SVG Icon -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text-wrapper">
+          <span class="brand-title">SiBantuan UMKM</span>
+          <span class="brand-subtitle">WebGIS Banjarmasin</span>
+        </div>
+      </a>
+
+      <!-- Nav Right -->
+      <div class="nav-right">
+        <a href="#faq" class="nav-link">FAQ</a>
+        <button type="button" class="btn btn-outline btn-with-arrow btn-open-track-modal">
+          <span>Cek Status</span>
+          <span class="btn-arrow-circle">🔍</span>
+        </button>
+        <a href="#simulasi-spk" class="btn btn-primary btn-with-arrow">
+          <span>Daftar Sekarang</span>
+          <span class="btn-arrow-circle" style="background:#FFFFFF; color:#1F1F1F;">➜</span>
+        </a>
+        <button type="button" class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu Navigasi">
+          ☰
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile Nav Drawer -->
+  <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+    <a href="#beranda" class="nav-link">Beranda</a>
+    <a href="#alur-seleksi" class="nav-link">Alur & Kriteria</a>
+    <a href="#peta-webgis" class="nav-link">Peta WebGIS Banjarmasin</a>
+    <a href="#simulasi-spk" class="nav-link">Simulasi Profile Matching</a>
+    <a href="#jadwal-gelombang" class="nav-link">Jadwal Seleksi</a>
+    <a href="#faq" class="nav-link">FAQ & Bantuan</a>
+    <button type="button" class="btn btn-outline btn-open-track-modal" style="width:100%; margin-top:8px;">
+      🔍 Cek Status Pengajuan NIK
+    </button>
+  </div>
+
+  <main>
+    <!-- ======================================================================
+         Hero Section (design.md 4.2)
+         ====================================================================== -->
+    <section class="hero-section" id="beranda">
+      <!-- 4-point Star Sparkles scattered in whitespace (design.md 5.2) -->
+      <div class="sparkle sparkle-1" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/>
+        </svg>
+      </div>
+      <div class="sparkle sparkle-2" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/>
+        </svg>
+      </div>
+      <div class="sparkle sparkle-3" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/>
+        </svg>
+      </div>
+      <div class="sparkle sparkle-4" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/>
+        </svg>
+      </div>
+
+      <div class="container">
+        <!-- Floating Tags (design.md 4.2) -->
+        <div class="hero-top-tags">
+          <span class="pill-tag">🏛️ Dinas Koperasi & UMKM Kota Banjarmasin</span>
+          <span class="pill-tag orange">⚡ Periode Bantuan Modal 2025/2026</span>
+        </div>
+
+        <!-- Headline with decorative pill & purple swoosh -->
+        <div class="hero-content-center">
+          <h1 class="hero-headline">
+            Salurkan Bantuan Modal 
+            <span class="highlight-pill">Tepat Sasaran</span> 
+            dengan Sistem Seleksi 
+            <span class="highlight-swoosh">WebGIS Cerdas</span>
+          </h1>
+
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 740px; margin: 0 auto; line-height: 1.6;">
+            Platform terpadu seleksi bantuan modal usaha menggunakan algoritma <strong>Profile Matching</strong> otomatis dan pemetaan spasial <strong>WebGIS</strong> untuk memastikan proses objektif, transparan, serta verifikasi lapangan efisien di 5 Kecamatan Kota Banjarmasin.
+          </p>
+
+          <!-- Sub-information & CTA group row (design.md 4.2) -->
+          <div class="hero-sub-row">
+            <div class="hero-sub-stats">
+              <div class="stat-item">
+                <span class="stat-number">1.450+</span>
+                <span class="stat-label">UMKM Terdata</span>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <span class="stat-number">5 Wilayah</span>
+                <span class="stat-label">Kecamatan</span>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Obyektif & Adil</span>
+              </div>
+            </div>
+
+            <div class="hero-cta-group">
+              <button type="button" class="btn btn-outline btn-with-arrow btn-open-track-modal">
+                <span>Pelacakan NIK</span>
+                <span class="btn-arrow-circle">🔍</span>
+              </button>
+              <a href="#peta-webgis" class="btn btn-primary btn-with-arrow">
+                <span>Jelajahi Peta Spasial</span>
+                <span class="btn-arrow-circle">➜</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature Carousel / 4 Rounded Square Tiles (design.md 4.2) -->
+        <div class="hero-tiles-wrapper">
+          <div class="tiles-grid">
+            <!-- Tile 1: Pastel Pink -->
+            <div class="tile-card tile-pink">
+              <div class="tile-icon-box" style="color: #D1456A;">
+                📝
+              </div>
+              <span class="tile-tag">Registrasi Mandiri</span>
+              <h3 class="tile-title">Validasi NIK 16 Digit</h3>
+              <p class="tile-desc">
+                Cegah duplikasi pendaftaran di satu gelombang dengan verifikasi otomatis NIK KTP, KK, dan nomor WhatsApp aktif.
+              </p>
+            </div>
+
+            <!-- Tile 2: Pastel Purple -->
+            <div class="tile-card tile-purple">
+              <div class="tile-icon-box" style="color: var(--accent-purple);">
+                ⚖️
+              </div>
+              <span class="tile-tag">Mesin SPK Otomatis</span>
+              <h3 class="tile-title">Metode Profile Matching</h3>
+              <p class="tile-desc">
+                Perhitungan GAP matematis Core Factor (60%) & Secondary Factor (40%) untuk perangkingan kelayakan yang tidak bias.
+              </p>
+            </div>
+
+            <!-- Tile 3: Pastel Blue -->
+            <div class="tile-card tile-blue">
+              <div class="tile-icon-box" style="color: #1E6DB5;">
+                🗺️
+              </div>
+              <span class="tile-tag">Spasial & Routing</span>
+              <h3 class="tile-title">WebGIS & OSRM Engine</h3>
+              <p class="tile-desc">
+                Visualisasi titik koordinat latitude/longitude usaha dan optimasi rute survei fisik lapangan terpendek antar UMKM.
+              </p>
+            </div>
+
+            <!-- Tile 4: Pastel Orange -->
+            <div class="tile-card tile-orange">
+              <div class="tile-icon-box" style="color: #CC6600;">
+                📢
+              </div>
+              <span class="tile-tag">Transparansi Publik</span>
+              <h3 class="tile-title">Notifikasi & Rekap SK</h3>
+              <p class="tile-desc">
+                Status pengajuan dipantau secara real-time, dilengkapi notifikasi WhatsApp otomatis serta ekspor dokumen SK penerima.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         "Our Class" Section Layout (design.md 4.3): Alur & Kriteria Seleksi
+         ====================================================================== -->
+    <section class="container" id="alur-seleksi">
+      <div class="section-rounded-container">
+        <!-- Section Header Split (design.md 4.3) -->
+        <div class="section-header-split">
+          <div class="section-title-group">
+            <span class="section-badge-pill">⚙️ Standar Seleksi Dinas</span>
+            <h2 class="section-main-title">Alur & Kriteria Penilaian Bantuan Modal</h2>
+          </div>
+          <p class="section-description">
+            Sesuai Kerangka Acuan PRD Dinas Koperasi, Usaha Mikro dan Tenaga Kerja Kota Banjarmasin, seluruh pendaftar dinilai melalui 3 tahapan terintegrasi guna menjamin keadilan bagi setiap pelaku usaha mikro.
+          </p>
+        </div>
+
+        <!-- 3 Vertical Cards (design.md 4.3) -->
+        <div class="class-cards-grid">
+          <!-- Card 1: Standard White Card (Administrasi) -->
+          <div class="class-card class-card-standard">
+            <div class="class-card-top">
+              <span class="card-num-badge">Tahap 01</span>
+              <h3 class="card-title">Pemberkasan & Legalitas Digital</h3>
+              <p class="card-body-text">
+                Pemohon mengunggah dokumen digital persyaratan wajib ke direktori penyimpanan terenkripsi yang aman dan privat.
+              </p>
+
+              <!-- Checklist -->
+              <ul class="card-checklist">
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span>KTP Elektronik Kota Banjarmasin</span>
+                </li>
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span>Kartu Keluarga (KK) Pemohon</span>
+                </li>
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span>NIB / Surat Keterangan Usaha (SKU)</span>
+                </li>
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span>Foto Fisik Operasional Tempat Usaha</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-visual-box">
+              <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 600;">
+                📁 Validasi Format PDF / JPG Terenkripsi
+              </span>
+            </div>
+
+            <div class="card-footer-action">
+              <span class="card-action-label">Verifikasi Administrasi</span>
+              <button type="button" class="btn-circle-action" onclick="showToast('Verifikasi dokumen diproses oleh Tim Admin Dinas!')" aria-label="Detail Tahap 1">
+                ➜
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 2: Highlighted Solid Purple Card (Profile Matching Engine) -->
+          <div class="class-card class-card-highlighted">
+            <div class="class-card-top">
+              <span class="card-num-badge">Tahap 02 — Core Engine</span>
+              <h3 class="card-title">Kalkulasi GAP Profile Matching</h3>
+              <p class="card-body-text">
+                Sistem menghitung tingkat selisih kompetensi usaha pemohon terhadap standar baku target ideal Dinas secara otomatis.
+              </p>
+
+              <!-- Checklist -->
+              <ul class="card-checklist">
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span><strong>Core Factor (60%):</strong> Omzet, SDM & Izin Usaha</span>
+                </li>
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span><strong>Secondary Factor (40%):</strong> Aset & Pasar</span>
+                </li>
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span>Pembobotan Tabel Interpolasi GAP 0 s/d ±4</span>
+                </li>
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span>Penetapan Passing Grade & Ranking Massal</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-visual-box">
+              <span style="font-size: 0.82rem; color: #FFFFFF; font-weight: 700;">
+                ⚡ Formula: Nilai Akhir = (NCF × 60%) + (NSF × 40%)
+              </span>
+            </div>
+
+            <div class="card-footer-action">
+              <span class="card-action-label">Coba Kalkulator SPK</span>
+              <a href="#simulasi-spk" class="btn-circle-action orange" aria-label="Buka Kalkulator SPK">
+                ➜
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 3: Standard White Card (WebGIS & Rute Lapangan) -->
+          <div class="class-card class-card-standard">
+            <div class="class-card-top">
+              <span class="card-num-badge">Tahap 03</span>
+              <h3 class="card-title">WebGIS & Optimasi Survei Lapangan</h3>
+              <p class="card-body-text">
+                Pemetaan titik spasial operasional UMKM yang lolos passing grade, memudahkan petugas dinas merencanakan rute survei fisik.
+              </p>
+
+              <!-- Checklist -->
+              <ul class="card-checklist">
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span>Plotting Koordinat Latitude / Longitude</span>
+                </li>
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span>Klasterisasi 5 Wilayah Kecamatan</span>
+                </li>
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span>Mesin OSRM Jalur Kunjungan Tercepat</span>
+                </li>
+                <li class="card-checklist-item">
+                  <span class="check-icon">✓</span>
+                  <span>Pencetakan Berita Acara Rekomendasi SK</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-visual-box">
+              <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 600;">
+                📍 Integrasi Leaflet.js + OpenStreetMap API
+              </span>
+            </div>
+
+            <div class="card-footer-action">
+              <span class="card-action-label">Buka Peta Interaktif</span>
+              <a href="#peta-webgis" class="btn-circle-action" aria-label="Buka Peta WebGIS">
+                ➜
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section Navigation Footer (design.md 4.3) -->
+        <div class="cards-section-footer">
+          <div class="pagination-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+          <div class="cards-nav-arrows">
+            <button type="button" class="btn-circle-action" style="width:36px; height:36px;" onclick="showToast('Navigasi geser alur sebelumnya')">◀</button>
+            <button type="button" class="btn-circle-action" style="width:36px; height:36px;" onclick="showToast('Navigasi geser alur berikutnya')">▶</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         Interactive WebGIS Banjarmasin (PRD Section 3 & Leaflet.js)
+         ====================================================================== -->
+    <section class="container" id="peta-webgis">
+      <div class="section-rounded-container" style="background: #FFFFFF;">
+        <div class="section-header-split">
+          <div class="section-title-group">
+            <span class="section-badge-pill">🗺️ Dasbor Spasial Spk</span>
+            <h2 class="section-main-title">Peta Sebaran UMKM Kota Banjarmasin</h2>
+          </div>
+          <p class="section-description">
+            Eksplorasi persebaran geografis UMKM yang terdaftar di Kota Banjarmasin. Gunakan filter kecamatan untuk memfilter titik sebaran atau uji coba simulasi routing survei fisik lapangan bagi petugas dinas.
+          </p>
+        </div>
+
+        <div class="webgis-container">
+          <!-- Sidebar Control Filter -->
+          <div class="webgis-sidebar">
+            <div class="sidebar-title">
+              <span>🎯</span>
+              <span>Filter & Kontrol Peta</span>
+            </div>
+
+            <!-- Filter Kecamatan -->
+            <div class="filter-group">
+              <label class="filter-label" for="filter-kecamatan">Pilih Kecamatan</label>
+              <select id="filter-kecamatan" class="filter-select">
+                <option value="all">Semua Kecamatan (5 Wilayah)</option>
+                <option value="Banjarmasin Tengah">Banjarmasin Tengah</option>
+                <option value="Banjarmasin Barat">Banjarmasin Barat</option>
+                <option value="Banjarmasin Utara">Banjarmasin Utara</option>
+                <option value="Banjarmasin Selatan">Banjarmasin Selatan</option>
+                <option value="Banjarmasin Timur">Banjarmasin Timur</option>
+              </select>
+            </div>
+
+            <!-- Filter Status Kelayakan -->
+            <div class="filter-group">
+              <label class="filter-label">Status Seleksi SPK</label>
+              <div class="status-pills-filter">
+                <span class="filter-chip status-filter-chip active" data-status="all">Semua Status</span>
+                <span class="filter-chip status-filter-chip" data-status="direkomendasikan">Lolos SPK</span>
+                <span class="filter-chip status-filter-chip" data-status="menunggu">Menunggu</span>
+              </div>
+            </div>
+
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent-purple);" id="gis-total-count">
+              8 Titik UMKM Ditampilkan
+            </div>
+
+            <!-- Panel Simulasi Rute Survei OSRM -->
+            <div class="route-simulation-panel">
+              <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-primary);">
+                🧭 Navigasi Survei Petugas (OSRM)
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4;">
+                Kalkulasi rute terpendek dari Kantor Dinas Koperasi Banjarmasin menuju titik UMKM berstatus rekomendasi.
+              </p>
+              <button type="button" class="btn btn-purple" style="width:100%; font-size:0.85rem; padding:10px;" onclick="simulateSurveyRoute()">
+                ⚡ Mulai Simulasi Rute
+              </button>
+
+              <div id="route-result-status"></div>
+            </div>
+          </div>
+
+          <!-- Leaflet Map Container -->
+          <div class="map-card-wrapper">
+            <div id="map"></div>
+
+            <!-- Floating Map Legend -->
+            <div class="map-legend-overlay">
+              <div class="legend-item">
+                <span class="legend-dot purple"></span>
+                <span>Kantor Dinas Koperasi</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot green"></span>
+                <span>Lolos Rekomendasi SPK</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot orange"></span>
+                <span>Menunggu Verifikasi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         Interactive Profile Matching Simulator (PRD Section 3 & 6)
+         ====================================================================== -->
+    <section class="container" id="simulasi-spk">
+      <div class="section-rounded-container" style="background: linear-gradient(180deg, #FFFFFF 0%, #FAF8FE 100%);">
+        <div class="section-header-split">
+          <div class="section-title-group">
+            <span class="section-badge-pill">📊 Simulator Mandiri</span>
+            <h2 class="section-main-title">Kalkulator Simulasi Profile Matching</h2>
+          </div>
+          <p class="section-description">
+            Uji estimasi kelayakan bantuan modal usaha Anda secara mandiri. Pilih parameter kriteria riil usaha Anda di bawah ini, dan sistem akan langsung mengompilasi nilai kesenjangan (GAP) dan skor kelayakan instansi.
+          </p>
+        </div>
+
+        <div class="spk-simulator-box">
+          <!-- Form Input Kriteria -->
+          <div class="simulator-form">
+            <!-- K1: Omzet -->
+            <div class="form-row">
+              <label for="calc-k1">
+                <span>1. Omzet Tahunan (Target Ideal: Rp 100jt - 300jt)</span>
+                <span class="factor-badge core">Core Factor (60%)</span>
+              </label>
+              <select id="calc-k1" class="select-input">
+                <option value="1">&lt; Rp 25 Juta / Tahun (Skor 1)</option>
+                <option value="2">Rp 25 Juta - Rp 50 Juta (Skor 2)</option>
+                <option value="3">Rp 50 Juta - Rp 100 Juta (Skor 3)</option>
+                <option value="4" selected>Rp 100 Juta - Rp 300 Juta (Skor 4 — Target Ideal)</option>
+                <option value="5">&gt; Rp 300 Juta / Tahun (Skor 5)</option>
+              </select>
+            </div>
+
+            <!-- K2: Aset -->
+            <div class="form-row">
+              <label for="calc-k2">
+                <span>2. Nilai Aset Usaha (Target Ideal: Rp 25jt - 50jt)</span>
+                <span class="factor-badge secondary">Secondary (40%)</span>
+              </label>
+              <select id="calc-k2" class="select-input">
+                <option value="1">&lt; Rp 10 Juta (Skor 1)</option>
+                <option value="2">Rp 10 Juta - Rp 25 Juta (Skor 2)</option>
+                <option value="3" selected>Rp 25 Juta - Rp 50 Juta (Skor 3 — Target Ideal)</option>
+                <option value="4">Rp 50 Juta - Rp 100 Juta (Skor 4)</option>
+                <option value="5">&gt; Rp 100 Juta (Skor 5)</option>
+              </select>
+            </div>
+
+            <!-- K3: Tenaga Kerja -->
+            <div class="form-row">
+              <label for="calc-k3">
+                <span>3. Jumlah Tenaga Kerja (Target Ideal: 3 - 5 Orang)</span>
+                <span class="factor-badge core">Core Factor (60%)</span>
+              </label>
+              <select id="calc-k3" class="select-input">
+                <option value="1">1 Orang / Dikelola Sendiri (Skor 1)</option>
+                <option value="2">2 Orang Pekerja (Skor 2)</option>
+                <option value="3">3 - 4 Orang Pekerja (Skor 3)</option>
+                <option value="4" selected>5 - 9 Orang Pekerja (Skor 4 — Target Ideal)</option>
+                <option value="5">&ge; 10 Orang Pekerja (Skor 5)</option>
+              </select>
+            </div>
+
+            <!-- K4: Pemasaran -->
+            <div class="form-row">
+              <label for="calc-k4">
+                <span>4. Jangkauan Pemasaran (Target Ideal: Skala Kota/Provinsi)</span>
+                <span class="factor-badge secondary">Secondary (40%)</span>
+              </label>
+              <select id="calc-k4" class="select-input">
+                <option value="1">Tingkat RT / RW (Skor 1)</option>
+                <option value="2">Tingkat Kelurahan (Skor 2)</option>
+                <option value="3">Tingkat Kecamatan (Skor 3)</option>
+                <option value="4" selected>Seluruh Kota Banjarmasin (Skor 4 — Target Ideal)</option>
+                <option value="5">Lintas Provinsi / Ekspor (Skor 5)</option>
+              </select>
+            </div>
+
+            <!-- K5: Perizinan -->
+            <div class="form-row">
+              <label for="calc-k5">
+                <span>5. Status Perizinan (Target Ideal: NIB + SKU Lengkap)</span>
+                <span class="factor-badge core">Core Factor (60%)</span>
+              </label>
+              <select id="calc-k5" class="select-input">
+                <option value="1">Belum Memiliki Izin Tertulis (Skor 1)</option>
+                <option value="2">Surat Keterangan Domisili (Skor 2)</option>
+                <option value="3">Surat Keterangan Usaha / SKU RT (Skor 3)</option>
+                <option value="4">NIB / SKU Kelurahan (Skor 4)</option>
+                <option value="5" selected>NIB OSS + P-IRT / Halal / BPOM (Skor 5 — Target Ideal)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Result Panel -->
+          <div class="simulator-result-panel">
+            <div class="result-header">
+              <span style="font-size: 0.82rem; font-weight: 800; color: var(--accent-purple); text-transform: uppercase; letter-spacing: 0.05em;">
+                Hasil Kalkulasi Profile Matching
+              </span>
+              <span style="font-size: 0.75rem; background: #EADEFC; color: var(--accent-purple); padding: 3px 8px; border-radius: 12px; font-weight: 700;">
+                Algoritma Otomatis
+              </span>
+            </div>
+
+            <!-- Circular Score Display -->
+            <div class="score-display-circle">
+              <span class="score-value" id="res-total">5.00</span>
+              <span class="score-label">Skor Akhir</span>
+            </div>
+
+            <!-- Breakdown Detail -->
+            <div class="calculation-breakdown">
+              <div class="calc-row">
+                <span class="calc-row-title">Core Factor (NCF - 60%):</span>
+                <span class="calc-row-val" id="res-ncf">5.00</span>
+              </div>
+              <div class="calc-row">
+                <span class="calc-row-title">Secondary Factor (NSF - 40%):</span>
+                <span class="calc-row-val" id="res-nsf">5.00</span>
+              </div>
+              <div class="calc-row" style="border-top: 1px dashed var(--border-subtle); padding-top: 8px;">
+                <span class="calc-row-title">Ambang Batas Minimum (Passing Grade):</span>
+                <span class="calc-row-val" style="color: var(--accent-purple);">3.80</span>
+              </div>
+            </div>
+
+            <!-- Status Indicator -->
+            <div id="res-status-container">
+              <div class="status-badge-lg pass">
+                <span>✨ Sangat Direkomendasikan (Prioritas Kuota)</span>
+              </div>
+            </div>
+
+            <p style="font-size: 0.78rem; color: var(--text-muted); text-align: center; margin-top: 4px;">
+              *Perhitungan ini merupakan simulasi instan mandiri. Skor final diputuskan setelah petugas memverifikasi bukti fisik berkas dan survei lapangan.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         Jadwal & Tahapan Gelombang Bantuan Modal (PRD Section 3)
+         ====================================================================== -->
+    <section class="container" id="jadwal-gelombang">
+      <div class="section-rounded-container" style="background: #FFFFFF;">
+        <div class="section-header-split">
+          <div class="section-title-group">
+            <span class="section-badge-pill">📅 Timeline Program</span>
+            <h2 class="section-main-title">Tahapan Pelaksanaan Gelombang Seleksi</h2>
+          </div>
+          <p class="section-description">
+            Perhatikan batas waktu setiap tahapan gelombang agar tidak terlewatkan. Pastikan akun UMKM Anda telah aktif dan berkas fisik sudah terunggah sebelum batas akhir penutupan pendaftaran.
+          </p>
+        </div>
+
+        <div class="timeline-grid">
+          <!-- Step 1 -->
+          <div class="timeline-step">
+            <span class="step-badge">1</span>
+            <span class="step-date">01 - 15 Okt 2025</span>
+            <h4 class="step-title">Pendaftaran Mandiri</h4>
+            <p class="step-desc">Pembuatan akun UMKM dengan validasi NIK 16 digit, pengisian form data usaha, dan penentuan titik koordinat WebGIS.</p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="timeline-step">
+            <span class="step-badge">2</span>
+            <span class="step-date">16 - 22 Okt 2025</span>
+            <h4 class="step-title">Verifikasi Dokumen</h4>
+            <p class="step-desc">Tim pemeriksa Dinas Koperasi meninjau keabsahan KTP, KK, NIB, SKU, dan foto usaha secara digital.</p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="timeline-step">
+            <span class="step-badge">3</span>
+            <span class="step-date">23 - 25 Okt 2025</span>
+            <h4 class="step-title">Kalkulasi SPK Massal</h4>
+            <p class="step-desc">Algoritma Profile Matching mengolah GAP dan menyusun ranking alternatif UMKM berdasarkan kuota alokasi.</p>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="timeline-step">
+            <span class="step-badge">4</span>
+            <span class="step-date">26 Okt - 05 Nov 2025</span>
+            <h4 class="step-title">Survei Lapangan</h4>
+            <p class="step-desc">Petugas mengunjungi lokasi fisik usaha terverifikasi menggunakan optimasi rute peta WebGIS.</p>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="timeline-step">
+            <span class="step-badge">5</span>
+            <span class="step-date">10 Nov 2025</span>
+            <h4 class="step-title">Pengumuman & SK</h4>
+            <p class="step-desc">Penerbitan Surat Keputusan (SK) Walikota dan penyaluran bantuan modal usaha kepada UMKM penerima.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         FAQ Section (Pertanyaan Umum)
+         ====================================================================== -->
+    <section class="container" id="faq">
+      <div class="section-rounded-container">
+        <div style="text-align: center; max-width: 680px; margin: 0 auto;">
+          <span class="section-badge-pill">💬 Informasi Bantuan</span>
+          <h2 class="section-main-title">Pertanyaan Sering Diajukan (FAQ)</h2>
+          <p class="section-description" style="margin: 12px auto 0;">
+            Temukan jawaban cepat seputar persyaratan, sistem penilaian SPK, dan alur pencairan bantuan modal usaha.
+          </p>
+        </div>
+
+        <div class="faq-list">
+          <!-- FAQ 1 -->
+          <div class="faq-item active">
+            <div class="faq-question">
+              <span>Siapa saja yang berhak mendaftar program bantuan modal ini?</span>
+              <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+              Pelaku Usaha Mikro dan Kecil yang berdomisili dan memiliki lokasi usaha fisik di wilayah administratif Kota Banjarmasin, memiliki NIK KTP Banjarmasin yang valid, serta memiliki legalitas usaha berupa NIB atau Surat Keterangan Usaha (SKU).
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Bagaimana algoritma Profile Matching menjamin objektivitas seleksi?</span>
+              <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+              Sistem menghitung selisih (GAP) antara kondisi riil pendaftar dan target ideal yang telah ditetapkan oleh Dinas Koperasi. Data diproses secara terotomatisasi menggunakan formula baku Core Factor (60%) dan Secondary Factor (40%) tanpa intervensi manual yang subjektif.
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Mengapa pemohon wajib menandai titik koordinat pada peta WebGIS?</span>
+              <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+              Titik koordinat (Latitude dan Longitude) digunakan oleh sistem untuk memetakan persebaran spasial dan mengoptimalkan rute kunjungan verifikasi faktual lapangan bagi petugas survei dinas menggunakan teknologi OSRM.
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Bagaimana jika berkas administrasi saya dinyatakan ditolak atau perlu revisi?</span>
+              <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+              Pendaftar akan menerima notifikasi otomatis melalui WhatsApp atau Email berisi catatan perbaikan dokumen dari Admin. Pemohon diberikan waktu 2x24 jam untuk mengunggah ulang dokumen revisi pada menu pendaftaran mandiri.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         Community / Footer Section (design.md 4.4)
+         ====================================================================== -->
+    <section class="container" style="margin-bottom: 60px;">
+      <div class="section-rounded-container footer-cta-container">
+        <!-- Section Tag (design.md 4.4) -->
+        <div class="footer-section-tag">
+          - Dinas Koperasi, Usaha Mikro dan Tenaga Kerja Kota Banjarmasin -
+        </div>
+
+        <!-- Headline with orange pill highlight -->
+        <h2 class="footer-headline">
+          Wujudkan Kemandirian Usaha Melalui Bantuan Tepat Sasaran Bersama 
+          <span class="highlight-pill">SiBantuan WebGIS</span>
+        </h2>
+
+        <!-- Subheadline (design.md 4.4) -->
+        <p class="footer-subheadline">
+          Mari kembangkan potensi wirausaha lokal Banua dengan tata kelola penyaluran modal yang transparan, akuntabel, dan berkeadilan melalui keunggulan teknologi digital.
+        </p>
+
+        <!-- Footer Actions -->
+        <div class="footer-actions">
+          <button type="button" class="btn btn-primary btn-with-arrow btn-open-track-modal">
+            <span>Cek Status Seleksi Anda</span>
+            <span class="btn-arrow-circle">➜</span>
+          </button>
+          <a href="#beranda" class="btn btn-outline btn-with-arrow">
+            <span>Kembali ke Atas</span>
+            <span class="btn-arrow-circle purple">▲</span>
+          </a>
+        </div>
+
+        <!-- Bottom Bar (design.md 4.4) -->
+        <div class="footer-bottom-bar">
+          <div>
+            <strong>Pemerintah Kota Banjarmasin</strong> • Dinas Koperasi, Usaha Mikro & Tenaga Kerja
+          </div>
+
+          <div class="footer-social-icons">
+            <a href="mailto:diskopumkm@banjarmasinkota.go.id" class="social-icon-btn" title="Email Dinas" aria-label="Kirim Email">
+              ✉️
+            </a>
+            <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="WhatsApp Hotline" aria-label="WhatsApp Hotline">
+              💬
+            </a>
+            <a href="tel:05113251234" class="social-icon-btn" title="Telepon Kantor" aria-label="Telepon Kantor">
+              📞
+            </a>
+            <a href="https://banjarmasinkota.go.id" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Portal Pemkot" aria-label="Portal Resmi Pemkot">
+              🌐
+            </a>
+          </div>
+
+          <div>
+            SPK UMKM WebGIS Banjarmasin &copy; 2025 • Hak Cipta Dilindungi
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       Modal Cek Status Pengajuan (Pelacakan Mandiri)
+       ======================================================================== -->
+  <div class="modal-backdrop" id="track-status-modal">
+    <div class="modal-box">
+      <button type="button" class="modal-close-btn" id="close-track-modal" aria-label="Tutup Dialog">✕</button>
+      
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+        <span style="font-size: 24px;">🔍</span>
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">Cek Status Pengajuan Bantuan</h3>
+      </div>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">
+        Masukkan 16 digit Nomor Induk Kependudukan (NIK) e-KTP yang digunakan saat mendaftar di sistem.
+      </p>
+
+      <form id="track-form">
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+          <label for="track-nik-input" style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary);">
+            Nomor Induk Kependudukan (NIK)
+          </label>
+          <input 
+            type="text" 
+            id="track-nik-input" 
+            class="select-input" 
+            placeholder="Contoh: 6371012304900001" 
+            maxlength="16" 
+            pattern="[0-9]{16}" 
+            required 
+            style="letter-spacing: 0.04em; font-weight: 700; font-size: 1rem;"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          Periksa Status Sekarang ➜
+        </button>
+      </form>
+
+      <!-- Hasil Pelacakan -->
+      <div id="track-result-box" style="display: none;"></div>
+
+      <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle); font-size: 0.76rem; color: var(--text-muted); text-align: center;">
+        Butuh bantuan teknis? Hubungi Hotline Dinas via WhatsApp di <strong>0812-3456-7890</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet.js Library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Core Application Scripts -->
+  <script src="js/spk-calculator.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
